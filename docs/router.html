@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>Iron Router SEO</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page">
+            
+              
+              <a class="source" href="router-utils.html">
+                router-utils.coffee
+              </a>
+            
+              
+              <a class="source" href="router.html">
+                router.coffee
+              </a>
+            
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              <h1 id="iron-router-seo">Iron Router SEO</h1>
+<p>For Meteor.</p>
+<ul>
+<li>GitHub: <a href="https://github.com/lookback/meteor-seo">meteor-seo</a></li>
+<li>Atmosphere: <a href="https://atmospherejs.com/lookback/seo">lookback:seo</a></li>
+</ul>
+<p>Written by Johan Brook for Lookback.</p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <h2 id="formatter">Formatter</h2>
+<p>A Formatter <em>returns a function</em> which is used to format
+its arguments into a general <code>meta</code> tag:</p>
+<pre><code class="lang-html"><span class="hljs-tag">&lt;<span class="hljs-title">meta</span> <span class="hljs-attribute">name</span>=<span class="hljs-value">"name"</span> <span class="hljs-attribute">content</span>=<span class="hljs-value">"content"</span>&gt;</span>
+</code></pre>
+<p>When constructing a formatter, the <code>opts.name</code> option must be set. This
+corresponds to the <code>name</code> attribute on the <code>meta</code> tag. <code>opts.prefix</code> may
+also be provided, and will prefix the <code>content</code> variable (see below). Useful
+in Twitter and OpenGraph formatters.</p>
+<p>The returned function takes two arguments: <code>content</code> and <code>key</code>.</p>
+<p><code>content</code> can be a function, array, or string. If it’s a function,
+it will be called with <code>this</code> bound to the scope of the returned function.</p>
+<p>If <code>content</code> is an array, it will be joined to a string, separated by <code>,</code> chars.</p>
+<p>Example:</p>
+<pre><code class="lang-coffeescript">TwitterFormatter = Formatter <span class="hljs-attribute">name</span>: <span class="hljs-string">'property'</span>, <span class="hljs-attribute">prefix</span>: <span class="hljs-string">'twitter'</span>
+TwitterFormatter(<span class="hljs-string">'http://domain.com'</span>, <span class="hljs-string">'url'</span>)<span class="hljs-function">
+=&gt;</span> &lt;meta property=<span class="hljs-string">"twitter:url"</span> content=<span class="hljs-string">"http://domain.com"</span>&gt;
+
+MetaFormatter = Formatter <span class="hljs-attribute">name</span>: <span class="hljs-string">'name'</span>
+MetaFormatter <span class="hljs-string">'This is desc'</span>, <span class="hljs-string">'description'</span><span class="hljs-function">
+=&gt;</span> &lt;meta name=<span class="hljs-string">"description"</span> content=<span class="hljs-string">"This is desc"</span>&gt;
+</code></pre>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-title">Formatter</span> = <span class="hljs-params">(opts)</span> -&gt;</span>
+  check opts.name, String
+
+  <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-params">(content, key)</span> -&gt;</span>
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> content
+
+    <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> Match.test content, Match.OneOf(String, Function, Array)
+      <span class="hljs-keyword">return</span> <span class="hljs-built_in">console</span>.warn <span class="hljs-string">"Content for <span class="hljs-subst">#{key}</span> must be a function, array, or string!"</span>, content
+
+    content = <span class="hljs-keyword">if</span> _.isFunction(content) <span class="hljs-keyword">then</span> content.call(<span class="hljs-keyword">this</span>) <span class="hljs-keyword">else</span> content
+    prefix = <span class="hljs-keyword">if</span> opts.prefix <span class="hljs-keyword">then</span> opts.prefix+<span class="hljs-string">':'</span> <span class="hljs-keyword">else</span> <span class="hljs-string">''</span>
+    property = <span class="hljs-string">"<span class="hljs-subst">#{prefix}</span><span class="hljs-subst">#{key}</span>"</span>
+
+    content = <span class="hljs-keyword">if</span> Array.isArray(content) <span class="hljs-keyword">then</span> content.join(<span class="hljs-string">', '</span>) <span class="hljs-keyword">else</span> content
+
+    Meta.set
+      <span class="hljs-attribute">name</span>: opts.name
+      <span class="hljs-attribute">property</span>: property
+      <span class="hljs-attribute">content</span>: content</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>Create formatters for OpenGraph, Twitter and regular meta tags.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>OpenGraphFormatter = Formatter <span class="hljs-attribute">name</span>: <span class="hljs-string">'property'</span>, <span class="hljs-attribute">prefix</span>: <span class="hljs-string">'og'</span>
+
+TwitterFormatter = Formatter <span class="hljs-attribute">name</span>: <span class="hljs-string">'property'</span>, <span class="hljs-attribute">prefix</span>: <span class="hljs-string">'twitter'</span>
+
+MetaFormatter = Formatter <span class="hljs-attribute">name</span>: <span class="hljs-string">'name'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>This is a title formatter, which will format the <code>&lt;title&gt;</code> tag (surprise).
+It will take suffixes and separators in account.</p>
+<p>A custom suffix can be provided by calling this formatter with <code>title</code>
+as an object: <code>{ text: &#39;Title&#39;, suffix: &#39;My Suffix&#39; }</code>. A custom separator
+can be provided to the <code>defaults</code> object.</p>
+<p>If <code>title.suffix</code> is explicitly set to <code>null</code>, no suffix is incldued. If
+<code>title.suffix</code> is not included at all, suffix will fallback to <code>defaults.suffix</code>
+if set.</p>
+<p>This formatter also sets the <code>og:title</code> and <code>twitter:title</code> meta property
+tags.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-title">TitleFormatter</span> = <span class="hljs-params">(title, defaults)</span> -&gt;</span>
+  separator = defaults.separator <span class="hljs-keyword">or</span> <span class="hljs-string">'·'</span>
+  suffix = defaults.suffix
+
+  <span class="hljs-keyword">if</span> _.isObject(title)
+    <span class="hljs-keyword">if</span> Match.test title, Match.ObjectIncluding(
+      <span class="hljs-attribute">text</span>: String
+    )
+      suffix = title.suffix <span class="hljs-keyword">unless</span> _.isUndefined(title.suffix)
+      stringTitle = title.text
+
+  <span class="hljs-keyword">else</span>
+    stringTitle = title
+
+  <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> Match.test stringTitle, String
+    <span class="hljs-keyword">return</span> <span class="hljs-built_in">console</span>.warn <span class="hljs-string">'Title must be a string!'</span>
+
+  browserTitle = stringTitle
+  <span class="hljs-keyword">if</span> suffix <span class="hljs-keyword">and</span> suffix <span class="hljs-keyword">isnt</span> <span class="hljs-literal">null</span>
+    browserTitle += <span class="hljs-string">" <span class="hljs-subst">#{separator}</span> <span class="hljs-subst">#{suffix}</span>"</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>Bypass Meta package’s setTitle, since we wanna compose our own.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  Meta.setVar <span class="hljs-string">'title'</span>, browserTitle
+  TwitterFormatter stringTitle, <span class="hljs-string">'title'</span>
+  OpenGraphFormatter stringTitle, <span class="hljs-string">'title'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <h2 id="computations">Computations</h2>
+<p>Keep track (pun not intended) of all computations that’s been
+made in the route functions, i.e. if a route has this:</p>
+<pre><code class="lang-coffeescript">Router.route <span class="hljs-string">'name'</span>,
+  <span class="hljs-attribute">seo</span>:
+    <span class="hljs-attribute">twitter</span>:
+      <span class="hljs-attribute">creator</span>:<span class="hljs-function"> -&gt;</span>
+        <span class="hljs-keyword">this</span>.data().post.author
+</code></pre>
+<p>Since that <code>creator</code> function will be actively re-run on
+route change, we need to stop it to prevent exceptions and
+other boring stuff. Therefore, run <code>Computations.clear()</code> in
+the Router’s <code>onStop</code> hook to clear everything we’ve made.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>Computations =
+  <span class="hljs-attribute">_comps</span>: []
+
+  <span class="hljs-attribute">add</span>: <span class="hljs-function"><span class="hljs-params">(c)</span> -&gt;</span>
+    <span class="hljs-property">@_comps</span>.push(c)
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>
+
+  <span class="hljs-attribute">clear</span>:<span class="hljs-function"> -&gt;</span>
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span> <span class="hljs-keyword">if</span> <span class="hljs-property">@_comps</span>.length <span class="hljs-keyword">is</span> <span class="hljs-number">0</span>
+
+    _.invoke(<span class="hljs-property">@_comps</span>, <span class="hljs-string">'stop'</span>)
+    <span class="hljs-property">@_comps</span> = []
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <h2 id="main">Main</h2>
+<p>Main route callback function.</p>
+<p>Will scrape the properties on the <code>seo</code> object on the route (if provided)
+and set relevant meta properties in <code>&lt;head&gt;</code>.</p>
+<p>All functions on the <code>seo</code> object will be called reactively.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-title">run</span> = <span class="hljs-params">(defaults = {})</span> -&gt;</span>
+  router = <span class="hljs-keyword">this</span>
+  seo = <span class="hljs-keyword">this</span>.lookupOption(<span class="hljs-string">'seo'</span>) <span class="hljs-keyword">or</span> {}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>Convenience function for calling a function <code>val</code> with the
+scope of the current route <em>if</em> it’s indeed function.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-function">  <span class="hljs-title">callOrGet</span> = <span class="hljs-params">(val)</span> -&gt;</span>
+    <span class="hljs-keyword">if</span> _.isFunction(val) <span class="hljs-keyword">then</span> val.call(router) <span class="hljs-keyword">else</span> val</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>Inherit a property or list of properties from the parent
+<code>seo</code> object if it isn’t available on <code>obj</code>.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-function">  <span class="hljs-title">inheritFromParent</span> = <span class="hljs-params">(obj, props)</span> -&gt;</span>
+    <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> Array.isArray(props)
+      props = [props]
+
+    props.forEach <span class="hljs-function"><span class="hljs-params">(prop)</span> -&gt;</span>
+      <span class="hljs-keyword">if</span> seo[prop] <span class="hljs-keyword">and</span> <span class="hljs-keyword">not</span> obj[prop]
+        obj[prop] = seo[prop]
+
+
+  Tracker.autorun <span class="hljs-function"><span class="hljs-params">(c)</span> -&gt;</span>
+    Computations.add(c)
+
+    title = callOrGet(seo.title <span class="hljs-keyword">or</span> defaults.title)
+    TitleFormatter title, _.pick(defaults, <span class="hljs-string">'suffix'</span>, <span class="hljs-string">'separator'</span>)
+
+    twitter = _.extend({}, defaults.twitter, seo.twitter)
+    og = _.extend({}, defaults.og, seo.og)
+    meta = _.extend({}, defaults.meta, seo.meta)
+
+    inheritFromParent twitter, [<span class="hljs-string">'image'</span>, <span class="hljs-string">'description'</span>]
+    inheritFromParent og, [<span class="hljs-string">'image'</span>, <span class="hljs-string">'description'</span>]
+    inheritFromParent meta, <span class="hljs-string">'description'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <p>For each property, use it’s formatter.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    _.each og, OpenGraphFormatter.bind(router)
+    _.each twitter, TwitterFormatter.bind(router)
+    _.each meta, MetaFormatter.bind(router)</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <p>Set the URL property for OpenGraph and Twitter tags
+from the current URL.</p>
+<p>This is why we call the <code>run</code> function in Meteor’s
+<code>afterFlush</code> callback – otherwise, <code>location.href</code> isn’t
+available to us.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    url = seo.url <span class="hljs-keyword">or</span> location.href
+    url = callOrGet url
+    TwitterFormatter url, <span class="hljs-string">'url'</span>
+    OpenGraphFormatter url, <span class="hljs-string">'url'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <h2 id="init">Init</h2>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-13">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
+              <p>Add necessary OpenGraph html attribute.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>Meteor.startup <span class="hljs-function">-&gt;</span>
+  $(<span class="hljs-string">'html'</span>).attr <span class="hljs-string">'prefix'</span>, <span class="hljs-string">'og: http://ogp.me/ns#'</span>
+
+{onReady, once} = share.RouterUtils</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-14">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-14">&#182;</a>
+              </div>
+              <p>Iron Router plugin definition. Called like:</p>
+<pre><code class="lang-coffeescript">Router.plugin <span class="hljs-string">'seo'</span>,
+  <span class="hljs-attribute">defaults</span>: &lt;<span class="hljs-reserved">default</span> SEO object&gt;
+  <span class="hljs-attribute">only</span>: [<span class="hljs-string">'myRoute'</span>]
+  <span class="hljs-attribute">except</span>: [<span class="hljs-string">'someOther'</span>]
+</code></pre>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>Iron.Router.plugins.s<span class="hljs-function"><span class="hljs-title">eo</span> = <span class="hljs-params">(router, options = {})</span> -&gt;</span>
+  defaults = options.defaults <span class="hljs-keyword">or</span> {}
+
+  defaultTitle = <span class="hljs-keyword">do</span> <span class="hljs-function">-&gt;</span>
+    title = defaults.title
+    <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> title <span class="hljs-keyword">or</span> title <span class="hljs-keyword">is</span> <span class="hljs-string">''</span>
+      <span class="hljs-keyword">return</span> <span class="hljs-string">''</span>
+
+    <span class="hljs-keyword">if</span> Match.test title, Function
+      <span class="hljs-keyword">return</span> title()
+
+    <span class="hljs-keyword">if</span> Match.test title, Match.ObjectIncluding(<span class="hljs-attribute">text</span>: String)
+      <span class="hljs-keyword">return</span> title.text
+
+    <span class="hljs-keyword">return</span> title</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-15">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-15">&#182;</a>
+              </div>
+              <p>Make sure to initialize the <code>Meta</code> package with an initial title.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  Meta.config(
+    <span class="hljs-attribute">options</span>:
+      <span class="hljs-attribute">title</span>: defaultTitle
+  )</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-16">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-16">&#182;</a>
+              </div>
+              <p>Function composition ftw. Use the utils <code>onReady</code> and <code>once</code> to ensure that
+the seo scraping will be done when the route is ready, and only to it <em>once</em>.</p>
+<p>Hook it up to Iron Router’s <code>onAfterAction</code> hook, and also make sure to
+stop all potential computations when the route stops.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  runWhenReady = onReady once _.partial(run, defaults)
+
+  routeOptions = _.pick(options, <span class="hljs-string">'only'</span>, <span class="hljs-string">'except'</span>)
+
+  router.onAfterAction(runWhenReady, routeOptions)
+
+  router.onStop <span class="hljs-function">-&gt;</span>
+    Computations.clear()</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>
