@@ -44,6 +44,8 @@ Example: you have a dedicated `blogPost` route and you want to insert the usual 
 
 ## Install
 
+Install [`lookback:seo`](https://atmospherejs.com/lookback/seo) from Atmosphere:
+
 ```bash
 meteor add lookback:seo
 ```

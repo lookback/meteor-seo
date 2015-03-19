@@ -1,4 +1,13 @@
-# # Formatter
+# # Iron Router SEO
+#
+# For Meteor.
+#
+# - GitHub: [meteor-seo](https://github.com/lookback/meteor-seo)
+# - Atmosphere: [lookback:seo](https://atmospherejs.com/lookback/seo)
+#
+# Written by Johan Brook for Lookback.
+
+# ## Formatter
 #
 # A Formatter *returns a function* which is used to format
 # its arguments into a general `meta` tag:
@@ -28,6 +37,7 @@
 # MetaFormatter = Formatter name: 'name'
 # MetaFormatter 'This is desc', 'description'
 # => <meta name="description" content="This is desc">
+#```
 Formatter = (opts) ->
   check opts.name, String
 
@@ -94,6 +104,8 @@ TitleFormatter = (title, defaults) ->
   TwitterFormatter stringTitle, 'title'
   OpenGraphFormatter stringTitle, 'title'
 
+# ## Computations
+#
 # Keep track (pun not intended) of all computations that's been
 # made in the route functions, i.e. if a route has this:
 #
@@ -123,6 +135,8 @@ Computations =
     @_comps = []
     return this
 
+# ## Main
+#
 # Main route callback function.
 #
 # Will scrape the properties on the `seo` object on the route (if provided)
@@ -179,6 +193,8 @@ run = (defaults = {}) ->
     TwitterFormatter url, 'url'
     OpenGraphFormatter url, 'url'
 
+# ## Init
+
 # Add necessary OpenGraph html attribute.
 Meteor.startup ->
   $('html').attr 'prefix', 'og: http://ogp.me/ns#'
@@ -209,12 +225,17 @@ Iron.Router.plugins.seo = (router, options = {}) ->
 
     return title
 
+  # Make sure to initialize the `Meta` package with an initial title.
   Meta.config(
     options:
       title: defaultTitle
   )
 
-  # Function composition ftw.
+  # Function composition ftw. Use the utils `onReady` and `once` to ensure that
+  # the seo scraping will be done when the route is ready, and only to it *once*.
+  #
+  # Hook it up to Iron Router's `onAfterAction` hook, and also make sure to
+  # stop all potential computations when the route stops.
   runWhenReady = onReady once _.partial(run, defaults)
 
   routeOptions = _.pick(options, 'only', 'except')
