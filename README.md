@@ -28,6 +28,8 @@ Router.route 'blogPost',
     Posts.findOne(this.params.id)
 ```
 
+[Read the annotated source.](https://lookback.github.io/meteor-seo/docs/router.html)
+
 ## Why?
 
 Currently, Meteor render templates client side. That means, we cannot dynamically manipulate the `head` section in our HTML when rendering templates. This package is able to automatically on route change render:
