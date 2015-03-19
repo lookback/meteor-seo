@@ -18,7 +18,7 @@ Package.onUse(function(api) {
     'underscore',
     'check',
     'jquery',
-    'iron:router'
+    'iron:router@1.0.7'
   ], where);
 
   api.addFiles([
