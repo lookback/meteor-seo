@@ -1,3 +1,6 @@
+# # Utils
+#
+# Handy router filters.
 share.RouterUtils =
 
   # Wraps a filter and ensures it only run once for the route.
