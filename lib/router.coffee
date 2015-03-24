@@ -153,14 +153,21 @@ run = (defaults = {}) ->
     if _.isFunction(val) then val.call(router) else val
 
   # Inherit a property or list of properties from the parent
-  # `seo` object if it isn't available on `obj`.
+  # `seo` object if it isn't available on `obj`. If not available
+  # on `seo`, try from `defaults`.
   inheritFromParent = (obj, props) ->
     if not Array.isArray(props)
       props = [props]
 
+    check obj, Object
+    check props, Array
+
     props.forEach (prop) ->
-      if seo[prop] and not obj[prop]
-        obj[prop] = seo[prop]
+      unless obj[prop]
+        if seo[prop]
+          obj[prop] = seo[prop]
+        else if defaults[prop]
+          obj[prop] = defaults[prop]
 
 
   Tracker.autorun (c) ->
