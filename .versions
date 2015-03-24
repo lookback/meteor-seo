@@ -21,7 +21,7 @@ iron:url@1.0.7
 jquery@1.11.3_2
 json@1.0.3
 logging@1.0.7
-lookback:seo@1.0.0
+lookback:seo@1.0.1
 meteor@1.1.5
 minifiers@1.1.4
 minimongo@1.0.7
