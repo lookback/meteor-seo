@@ -31,7 +31,7 @@ launch-screen@1.0.2
 less@1.0.13
 livedata@1.0.13
 logging@1.0.7
-lookback:seo@0.0.2
+lookback:seo@1.0.0
 meteor@1.1.5
 meteor-platform@1.2.2
 mike:mocha@0.5.2
