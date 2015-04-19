@@ -42,7 +42,7 @@ if Meteor.isClient
   )
 
   Template.home.created = ->
-    Session.setDefault 'title', 'Title session'
+    Session.setDefault 'title', 'Session title'
     Session.setDefault 'dynamic', 'DYNAMIC VALUE'
 
   Router.route 'home',
@@ -75,6 +75,18 @@ if Meteor.isClient
 
     data: ->
       page: 'Object'
+
+  Router.route 'objectFunctions',
+    template: 'home'
+    seo:
+      title:
+        text: ->
+          'Object function title'
+        suffix: ->
+          'Suffix'
+
+    data: ->
+      page: 'Object-Functions'
 
   Router.route 'no-suffix',
     template: 'home'
