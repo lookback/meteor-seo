@@ -7,6 +7,11 @@
 #
 # Written by Johan Brook for Lookback.
 
+# Convenience function for calling a function `val` with the
+# scope of the current route *if* it's indeed function.
+callOrGet = (router, val) ->
+  if _.isFunction(val) then val.call(router) else val
+
 # ## Formatter
 #
 # A Formatter *returns a function* which is used to format
@@ -78,16 +83,18 @@ MetaFormatter = Formatter name: 'name'
 #
 # This formatter also sets the `og:title` and `twitter:title` meta property
 # tags.
+#
+# The scope of `this` is the current router.
 TitleFormatter = (title, defaults) ->
   separator = defaults.separator or '·'
   suffix = defaults.suffix
 
   if _.isObject(title)
     if Match.test title, Match.ObjectIncluding(
-      text: String
+      text: Match.OneOf(String, Function)
     )
-      suffix = title.suffix unless _.isUndefined(title.suffix)
-      stringTitle = title.text
+      suffix = callOrGet(this, title.suffix) unless _.isUndefined(title.suffix)
+      stringTitle = callOrGet(this, title.text)
 
   else
     stringTitle = title
@@ -147,10 +154,7 @@ run = (defaults = {}) ->
   router = this
   seo = this.lookupOption('seo') or {}
 
-  # Convenience function for calling a function `val` with the
-  # scope of the current route *if* it's indeed function.
-  callOrGet = (val) ->
-    if _.isFunction(val) then val.call(router) else val
+  call = _.partial(callOrGet, router)
 
   # Inherit a property or list of properties from the parent
   # `seo` object if it isn't available on `obj`. If not available
@@ -173,8 +177,8 @@ run = (defaults = {}) ->
   Tracker.autorun (c) ->
     Computations.add(c)
 
-    title = callOrGet(seo.title or defaults.title)
-    TitleFormatter title, _.pick(defaults, 'suffix', 'separator')
+    title = call(seo.title or defaults.title)
+    TitleFormatter.call(router, title, _.pick(defaults, 'suffix', 'separator'))
 
     twitter = _.extend({}, defaults.twitter, seo.twitter)
     og = _.extend({}, defaults.og, seo.og)
@@ -196,7 +200,7 @@ run = (defaults = {}) ->
     # `afterFlush` callback – otherwise, `location.href` isn't
     # available to us.
     url = seo.url or location.href
-    url = callOrGet url
+    url = call url
     TwitterFormatter url, 'url'
     OpenGraphFormatter url, 'url'
 

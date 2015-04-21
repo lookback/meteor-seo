@@ -56,6 +56,14 @@ MochaWeb?.testOnly ->
           done()
         , 10
 
+      it 'should be able to be set from an object with functions', (done) ->
+        Router.go 'objectFunctions'
+
+        Meteor.setTimeout ->
+          document.title.should.equal 'Object function title · Suffix'
+          done()
+        , 10
+
       it 'should be able have no suffix', (done) ->
         Router.go 'no-suffix'
 
