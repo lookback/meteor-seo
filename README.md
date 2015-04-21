@@ -174,6 +174,7 @@ The global `Meta` helper from `blaze-meta` is exposed for you on the client, in 
 
 ## Version history
 
+- `1.1.0` - Support functions as values in the `title` object ([#3](https://github.com/lookback/meteor-seo/pull/3)).
 - `1.0.0` - Initial publish.
 
 ## Tests
