@@ -172,6 +172,10 @@ This package only runs on the router's `onAfterAction` hook. Under the hood, we 
 
 The global `Meta` helper from `blaze-meta` is exposed for you on the client, in order to set individual tags.
 
+## Spiderable compability
+
+This package is compatible with Meteor's Spiderable package, but requires [PhantomJS **2.0**](http://phantomjs.org/).
+
 ## Version history
 
 - `1.1.0` - Support functions as values in the `title` object ([#3](https://github.com/lookback/meteor-seo/pull/3)).
