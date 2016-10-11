@@ -182,7 +182,7 @@ run = (defaults = {}) ->
 
     twitter = _.extend({}, defaults.twitter, seo.twitter)
     og = _.extend({}, defaults.og, seo.og)
-    meta = _.extend({}, defaults.meta, seo.meta)
+    meta = _.extend({}, call(seo.meta or defaults.meta))
 
     inheritFromParent twitter, ['image', 'description']
     inheritFromParent og, ['image', 'description']
