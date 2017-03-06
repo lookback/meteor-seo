@@ -66,7 +66,7 @@ Formatter = (opts) ->
 # Create formatters for OpenGraph, Twitter and regular meta tags.
 OpenGraphFormatter = Formatter name: 'property', prefix: 'og'
 
-TwitterFormatter = Formatter name: 'property', prefix: 'twitter'
+TwitterFormatter = Formatter name: 'name', prefix: 'twitter'
 
 MetaFormatter = Formatter name: 'name'
 
