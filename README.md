@@ -178,6 +178,7 @@ This package is compatible with Meteor's Spiderable package, but requires [Phant
 
 ## Version history
 
+- `1.1.1` - Fix `meta` syntax for Twitter cards.
 - `1.1.0` - Support functions as values in the `title` object ([#3](https://github.com/lookback/meteor-seo/pull/3)).
 - `1.0.0` - Initial publish.
 
