@@ -24,7 +24,7 @@ iron:router@1.0.7
 iron:url@1.0.7
 jquery@1.11.10
 logging@1.1.17
-lookback:seo@1.1.1
+lookback:seo@1.1.2
 meteor@1.6.1
 minifiers@1.1.5
 modules@0.7.9
