@@ -3,7 +3,7 @@ var where = 'client';
 Package.describe({
   name: 'lookback:seo',
   summary: 'Automatically add meta, OpenGraph and Twitter tags from your Iron Router routes.',
-  version: '1.1.2',
+  version: '1.1.3',
   git: 'http://github.com/lookback/meteor-seo'
 });
 
