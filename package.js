@@ -13,6 +13,7 @@ Package.onUse(function(api) {
   api.imply('yasinuslu:blaze-meta@0.3.1', where);
 
   api.use([
+    'mongo',
     'coffeescript',
     'tracker',
     'underscore',
